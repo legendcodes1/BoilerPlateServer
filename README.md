@@ -41,6 +41,9 @@ DATABASE_URL=your_mongodb_connection_string
 Start the development server:
 
 ```bash
+
+docker compose up -d mongo mongo-express
+
 npm run dev
 ```
 
