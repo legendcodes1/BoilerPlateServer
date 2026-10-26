@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
+
 import { User } from './models/User';
 import usersRoutes from './routes/users.routes';
 

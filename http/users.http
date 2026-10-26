@@ -1,0 +1,30 @@
+@baseUrl=http://localhost:8000/users
+
+### list users
+GET {{baseUrl}}
+
+### create user
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "email": "checker@checker.checker",
+  "username": "checker",
+  "password": "123456s*"
+}
+
+### getById
+GET {{baseUrl}}/6adeae26b46026283420b159
+
+### update
+PUT {{baseUrl}}/6adeae26b46026283420b159
+Content-Type: application/json
+
+{
+  "email": "updated@updated.updated",
+  "username": "updated"
+}
+
+### delete
+DELETE {{baseUrl}}/6adeae26b46026283420b159
+
