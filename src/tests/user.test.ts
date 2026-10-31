@@ -69,4 +69,44 @@ describe("GET /users", () => {
 
     // Your next assertions go here
   });
+
+  describe("POST /users", () => {
+    it("creates a new user", async () => {
+      // Arrange
+      const newUser = {
+        username: "john",
+        email: "john@example.com",
+        passwordHash: "test-hash-3",
+      };
+
+      // Act
+      const response = await request(app).post("/users").send(newUser);
+
+      // Assert
+      expect(response.status).toBe(201);
+      expect(response.body.data).toHaveProperty("username", "john");
+      expect(response.body.data).toHaveProperty("email", "john@example.com");
+      expect(response.body.data).toHaveProperty("passwordHash", "test-hash-3");
+    });
+  });
+
+
+  //   describe("GET /api/product/show/:id", () => {
+  //     test('should return all products', async () => {
+  //         return request(app)
+  //             .get(`/api/product/show/${productId}`)
+  //             .expect(200)
+  //             .expect('Content-Type', /application\/json/)
+  //     });
+  // })
+
+  // describe("PUT /api/product/update/:id", () => {
+  //     test("should update a product", async () => {
+  //         return request(app)
+  //             .put(`/api/product/update/${productId}`)
+  //             .set('Authorization',  `Bearer ${token}`)
+  //             .send(requpdateProduct)
+  //             .expect(201)
+  //     });
+  // });
 });
