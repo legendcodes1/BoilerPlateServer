@@ -70,43 +70,92 @@ describe("GET /users", () => {
     // Your next assertions go here
   });
 
-  describe("POST /users", () => {
-    it("creates a new user", async () => {
-      // Arrange
-      const newUser = {
-        username: "john",
-        email: "john@example.com",
-        passwordHash: "test-hash-3",
-      };
+describe("POST /users", () => {
+  it("creates a new user", async () => {
+    // ARRANGE
+    const newUser = {
+      username: "john",
+      email: "john@example.com",
+      password: "ExamplePassword123!",
+    };
 
-      // Act
-      const response = await request(app).post("/users").send(newUser);
+    // ACT
+    const response = await request(app)
+      .post("/users")
+      .send(newUser);
 
-      // Assert
-      expect(response.status).toBe(201);
-      expect(response.body.data).toHaveProperty("username", "john");
-      expect(response.body.data).toHaveProperty("email", "john@example.com");
-      expect(response.body.data).toHaveProperty("passwordHash", "test-hash-3");
-    });
+    // ASSERT
+    expect(response.status).toBe(201);
+
+    expect(response.body.data).toHaveProperty(
+      "username",
+      "john"
+    );
+
+    expect(response.body.data).toHaveProperty(
+      "email",
+      "john@example.com"
+    );
+
+    expect(response.body.data).not.toHaveProperty(
+      "passwordHash"
+    );
   });
+});
 
 
-  //   describe("GET /api/product/show/:id", () => {
-  //     test('should return all products', async () => {
-  //         return request(app)
-  //             .get(`/api/product/show/${productId}`)
-  //             .expect(200)
-  //             .expect('Content-Type', /application\/json/)
-  //     });
-  // })
+describe("PATCH /users/:_id", () => {
+  it("should update a user's username", async () => {
+    // ARRANGE: Create a test user
+    const user = await User.create({
+      username: "alex",
+      email: "alex@example.com",
+      passwordHash: "test-hash",
+    });
 
-  // describe("PUT /api/product/update/:id", () => {
-  //     test("should update a product", async () => {
-  //         return request(app)
-  //             .put(`/api/product/update/${productId}`)
-  //             .set('Authorization',  `Bearer ${token}`)
-  //             .send(requpdateProduct)
-  //             .expect(201)
-  //     });
-  // });
+    const userId = user._id.toString();
+
+    // ACT: Send update request
+    const response = await request(app)
+      .patch(`/users/${userId}`)
+      .send({
+        username: "alexUpdated",
+      });
+
+    // ASSERT
+    expect(response.status).toBe(200);
+
+    // TODO 1: Verify response.body.data.username
+     expect(response.body.data).toHaveProperty("username", "alexUpdated");
+    // TODO 2: Verify response.body.data.email
+     expect(response.body.data).toHaveProperty("email", "john@example.com");
+  });
+});
+
+
+describe("DELETE /users/:_id", () => {
+  it("should delete an existing user", async () => {
+    // ARRANGE
+    const user = await User.create({
+      username: "alex",
+      email: "alex@example.com",
+      passwordHash: "test-hash",
+    });
+
+    const userId = user._id.toString();
+
+    // ACT
+    const response = await request(app)
+      .delete(`/users/${userId}`);
+
+    // ASSERT: Check HTTP response
+    expect(response.status).toBe(200);
+
+    // ASSERT: Check the document no longer exists
+    const deletedUser = await User.findById(userId);
+
+    expect(deletedUser).toBeNull();
+  });
+});
+
 });
