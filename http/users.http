@@ -14,10 +14,10 @@ Content-Type: application/json
 }
 
 ### getById
-GET {{baseUrl}}/6adeae26b46026283420b159
+GET {{baseUrl}}/6ae7f74779219780eeac9f93
 
 ### update
-PUT {{baseUrl}}/6adeae26b46026283420b159
+PUT {{baseUrl}}/6ae7f74779219780eeac9f93
 Content-Type: application/json
 
 {
@@ -26,5 +26,5 @@ Content-Type: application/json
 }
 
 ### delete
-DELETE {{baseUrl}}/6adeae26b46026283420b159
+DELETE {{baseUrl}}/6ae7f74779219780eeac9f93
 

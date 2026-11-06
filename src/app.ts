@@ -1,28 +1,35 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
 
-
-import { User } from './models/User';
-import usersRoutes from './routes/users.routes';
+import User from "./models/user.model";
+import usersRoutes from "./routes/users.routes";
+import morgan from "morgan";
 
 const app = express();
 
 // middlewares
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "PUT", "POST", "DELETE"]
-})); // CROSS ORIGIN RESOURCE SHARING
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "PUT", "POST", "DELETE"],
+  }),
+); // CROSS ORIGIN RESOURCE SHARING
 app.use(express.json()); // ENABLES body to be present in Request object
-// morgan logger
+// morgan logger - stream should log to a file using winston
+app.use(
+  morgan(
+    "dev",
+    // { stream: null }
+  ),
+);
 // static file hosting
 
-
 // routes
-app.get("/ping", function(req, res) {
+app.get("/ping", function (req, res) {
   res.send("pong");
-})
+});
 
-app.use("/users", usersRoutes)
+app.use("/users", usersRoutes);
 
 // app.get("/create-user", async function(req, res) {
 //   const user = new User({
@@ -45,4 +52,3 @@ app.use("/users", usersRoutes)
 // DI CONTAINER ( dependency injection )
 
 export default app;
-

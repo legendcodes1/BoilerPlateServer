@@ -1,0 +1,10 @@
+## TODOS
+
+- SETUP HUSKY, PRETTIER, ESLINT [x]
+- CHECK TESTS [x]
+- MIDDLEWARE REQ PARAMS AND BODY VALIDATOR []
+- SWAGGER API DOCS []
+- REDIS [] -> add to docker compose and start creating cache keys
+- REGISTRY AND BROKER []
+- JOBS AND QUEUES []
+- API ROUTING []

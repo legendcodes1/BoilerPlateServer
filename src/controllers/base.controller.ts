@@ -1,66 +1,72 @@
-import type { Model } from 'mongoose';
-import type { Request, Response } from 'express';
-import mongoose from 'mongoose';
+import type { Model } from "mongoose";
+import type { Request, Response } from "express";
+import mongoose from "mongoose";
 import _ from "lodash";
 
-import errorHandler, { ERROR_MESSAGES } from '../utils/helpers/errors.handler'
-import logger from '../logs/logger';
+import errorHandler, { ERROR_MESSAGES } from "../utils/helpers/errors.handler";
+import logger from "../logs/logger";
 
 class BaseController<T> {
   model: Model<T>;
   ERROR_MESSAGES: typeof ERROR_MESSAGES;
-  errorHandler: (error: Error, req: Request, res: Response) => void
+  errorHandler: (error: Error, req: Request, res: Response) => void;
   logger: typeof logger;
-  _: typeof _
-
+  _: typeof _;
 
   constructor(model: Model<T>) {
-    this.model = model
+    this.model = model;
     this.ERROR_MESSAGES = ERROR_MESSAGES;
     this.errorHandler = errorHandler;
     this.logger = logger;
     this._ = _;
   }
 
+  /**
+   * @desc generic list with pagination
+   * @async
+   */
   async list(req: Request, res: Response) {
     try {
       // http://localhost:8000/api/v1/users?email=test@test.test
       // queries = page, limit, order
       const { page = 1, limit = 10 } = req.query;
       // page - 1, limit - 10
-      const q = this._.omit(req.query, ['page', 'limit'])
+      const q = this._.omit(req.query, ["page", "limit"]);
 
-      const documents = await this.model.find(q)
+      const documents = await this.model
+        .find(q)
         .sort({ createdAt: -1 })
         .skip((Number(page) - 1) * Number(limit))
-        .limit(Number(limit))
+        .limit(Number(limit));
 
-      if(!documents) throw new Error(this.ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+      if (!documents)
+        throw new Error(this.ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
 
       res.status(200).json({
         message: "Documents retrieved succesfully...",
         data: documents,
-      })
+      });
     } catch (error) {
-      this.errorHandler((error as Error), req, res)
+      this.errorHandler(error as Error, req, res);
     }
   }
 
-  async getById(req:Request, res: Response) {
+  async getById(req: Request, res: Response) {
     try {
       const id = req.params._id;
-      if(!mongoose.isValidObjectId(id) ) throw new Error(this.ERROR_MESSAGES.USER_NOT_FOUND)
-        const data = await this.model.findById(id)
-        res.status(200).json( {
-          message: "User found",
-          data: data
-        })
+      if (!mongoose.isValidObjectId(id))
+        throw new Error(this.ERROR_MESSAGES.USER_NOT_FOUND);
+      const data = await this.model.findById(id);
+      res.status(200).json({
+        message: "User found",
+        data: data,
+      });
     } catch (error) {
-      this.errorHandler((error as Error), req, res)
+      this.errorHandler(error as Error, req, res);
     }
   }
 
-   async create(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     try {
       const data = await this.model.create(req.body);
 
@@ -69,58 +75,66 @@ class BaseController<T> {
         data,
       });
     } catch (error) {
-        this.errorHandler((error as Error), req, res)
+      this.errorHandler(error as Error, req, res);
     }
   }
+
   async update(req: Request, res: Response) {
     try {
       const id = req.params._id;
-      const data = await this.model.findByIdAndUpdate(id, req.body, { new: true });
-
-      if (!data) {
-      return res.status(404).json({
-        error: "Document not found"
+      const data = await this.model.findByIdAndUpdate(id, req.body, {
+        new: true,
       });
-    }
+
+      // if (!data) {
+      //   return res.status(404).json({
+      //     error: "Document not found"
+      //   });
+      // }
+
+      if (!data) throw new Error(this.ERROR_MESSAGES.RESOURCES_NOT_FOUND);
+
       return res.status(200).json({
         message: "Document updated",
         data,
       });
     } catch (error) {
-      this.errorHandler((error as Error), req, res)
+      this.errorHandler(error as Error, req, res);
     }
   }
 
   async delete(req: Request, res: Response) {
-
     try {
-      const id = req.params._id;
+      // const id = req.params._id;
+      const documentId = req.params?._id ?? undefined;
 
-      if (!mongoose.isValidObjectId(id)) {
+      // should be handled by validator middleware
+      if (!mongoose.isValidObjectId(documentId)) {
         return res.status(400).json({
-          error: "Invalid document ID"
+          error: "Invalid document ID",
         });
       }
 
-      const data = await this.model.findByIdAndDelete(id);
+      // soft delete would be update deletedAt field to timestamp
+      // cronjob to handle the hard deletes
+
+      // hard deletes
+      const data = await this.model.findByIdAndDelete(documentId);
 
       if (!data) {
         return res.status(404).json({
-          error: "Document not found"
+          error: "Document not found",
         });
       }
-      
+
       return res.status(200).json({
         message: "Document deleted",
         data,
       });
-
-      
     } catch (error) {
-      this.errorHandler((error as Error), req, res)
+      this.errorHandler(error as Error, req, res);
     }
   }
-  
 }
 
-export default BaseController
+export default BaseController;

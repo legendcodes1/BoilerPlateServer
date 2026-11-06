@@ -1,0 +1,12 @@
+2026-11-02T03:34:09.786Z [31merror[39m: mongoose count not connect: error = Missing required sub-document 'driver' in the client metadata document
+2026-11-02T03:35:56.498Z [31merror[39m: mongoose count not connect: error = Missing required sub-document 'driver' in the client metadata document
+2026-11-02T03:39:50.746Z [31merror[39m: mongoose could not connect: error = Missing required sub-document 'driver' in the client metadata document
+2026-11-02T03:41:48.160Z [32minfo[39m: mongoUri =
+2026-11-02T03:41:50.300Z [31merror[39m: mongoose could not connect: error = Missing required sub-document 'driver' in the client metadata document
+2026-11-02T03:43:09.235Z [32minfo[39m: mongoUri =
+2026-11-02T03:43:11.351Z [31merror[39m: mongoose could not connect: error = Missing required sub-document 'driver' in the client metadata document
+2026-11-02T03:44:29.370Z [32minfo[39m: mongoUri =
+2026-11-02T03:44:31.440Z [31merror[39m: mongoose could not connect: error = Missing required sub-document 'driver' in the client metadata document
+2026-11-02T03:45:13.903Z [32minfo[39m: mongoUri =
+2026-11-02T03:45:15.976Z [31merror[39m: mongoose could not connect: error = Missing required sub-document 'driver' in the client metadata document
+2026-11-02T03:45:58.245Z [31merror[39m: mongoose could not connect: error = Missing required sub-document 'driver' in the client metadata document
