@@ -6,6 +6,8 @@ import _ from "lodash";
 import errorHandler, { ERROR_MESSAGES } from "../utils/helpers/errors.handler";
 import logger from "../logs/logger";
 
+// let cache = {};
+
 class BaseController<T> {
   model: Model<T>;
   ERROR_MESSAGES: typeof ERROR_MESSAGES;
@@ -29,6 +31,15 @@ class BaseController<T> {
     try {
       // http://localhost:8000/api/v1/users?email=test@test.test
       // queries = page, limit, order
+
+      // cookie to identify who made call -> JWT TOKEN;
+      // cache creation key -> "/api/v1/users" -> "/api/v1/users:list:JWT_TOKEN"
+      // check redis if this key exists
+      // just send back cached result
+      // if cache miss run controller
+      // and store cache key
+      // -> "/api/v1/users:list:JWT_TOKEN": JSON.stringify(req.data) // TTL: 60 * 30
+
       const { page = 1, limit = 10 } = req.query;
       // page - 1, limit - 10
       const q = this._.omit(req.query, ["page", "limit"]);

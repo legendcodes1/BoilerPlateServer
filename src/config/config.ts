@@ -1,11 +1,12 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
 interface IConfig {
-  appMode: "DEV" | "PROD" | "STAGING"
-  mongoUri: string
-  port: number
+  appMode: "DEV" | "PROD" | "STAGING";
+  mongoUri: string;
+  port: number;
+  redisUri: string;
   // tokenSecret: string
   // tokenTtl: string
   // refreshTokenSecret: string
@@ -14,12 +15,16 @@ interface IConfig {
 
 const config = {
   appMode: process.env.APP_MODE || "DEV",
-  mongoUri: process.env[`${process.env.APP_MODE}_MONGO_URI`] || "mongodb://localhost:27017/boilerplate",
-  port: Number(process.env.PORT || 8000)
-} as IConfig
+  mongoUri:
+    process.env[`${process.env.APP_MODE}_MONGO_URI`] ||
+    "mongodb://localhost:27017/boilerplate",
+  port: Number(process.env.PORT || 8000),
+  redisUri:
+    process.env[`${process.env.APP_MODE}_REDIS_URI`] ||
+    "redis://localhost:6379",
+} as IConfig;
 
 export default config;
-
 
 // # PROD | DEV | STAGING
 // APP_MODE=DEV
