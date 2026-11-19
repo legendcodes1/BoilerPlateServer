@@ -2,11 +2,13 @@ import express from "express";
 import cors from "cors";
 
 import User from "./models/user.model";
+import { emailsController } from "./controllers";
 // import usersRoutes from "./routes/users.routes";
 import morgan from "morgan";
 import { morganStream } from "./logs/logger";
-import swaggerUi from "swagger-ui-express";
+// import swaggerUi from "swagger-ui-express";
 import routes from "./app.routes";
+import registry from "./app.registry";
 
 const app = express();
 
@@ -24,27 +26,11 @@ app.use(express.json()); // ENABLES body to be present in Request object
 app.use(morgan("dev", { stream: morganStream }));
 // static file hosting
 
+// registry
+registry.register("user.model", User);
+registry.register("emails.controller", emailsController);
+
 // routes
 app.use(routes);
-
-// app.get("/create-user", async function(req, res) {
-//   const user = new User({
-//     email: "test@test.test",
-//     username: "tester",
-//     passwordHash: "SA12345LT"
-//   })
-
-//   const savedUser = await user.save()
-
-//   res.json(savedUser)
-// })
-
-// app.get("/users", async function(req, res) {
-//   const users = await User.find();
-//   res.json(users)
-// })
-
-// registry
-// DI CONTAINER ( dependency injection )
 
 export default app;

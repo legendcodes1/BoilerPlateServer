@@ -5,6 +5,9 @@ import _ from "lodash";
 
 import errorHandler, { ERROR_MESSAGES } from "../utils/helpers/errors.handler";
 import logger from "../logs/logger";
+import cacheService from "../services/cache.service";
+import registry from "../app.registry";
+import broker from "../app.broker";
 
 // let cache = {};
 
@@ -14,6 +17,10 @@ class BaseController<T> {
   errorHandler: (error: Error, req: Request, res: Response) => void;
   logger: typeof logger;
   _: typeof _;
+  cacheService: typeof cacheService;
+  registry: typeof registry;
+  broker: typeof broker;
+  listeners?(): void;
 
   constructor(model: Model<T>) {
     this.model = model;
@@ -21,6 +28,13 @@ class BaseController<T> {
     this.errorHandler = errorHandler;
     this.logger = logger;
     this._ = _;
+    this.cacheService = cacheService;
+    this.registry = registry;
+    this.broker = broker;
+
+    if (typeof this.listeners === "function") {
+      this.listeners();
+    }
   }
 
   /**

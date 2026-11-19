@@ -6,7 +6,9 @@ import dbConnect from "./config/db.connect";
 import redis, { connectRedis } from "./config/redis";
 
 dbConnect(config.mongoUri)
-  .then(async () => {
+  .then(async (dbConnection) => {
+    if (!dbConnection) throw new Error("mongo did not connect");
+
     await connectRedis();
 
     const server = app.listen(config.port, "0.0.0.0", function () {

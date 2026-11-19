@@ -108,17 +108,16 @@ Current implementation includes:
 - User model
 - AuthToken model
 
-
-
 ### TODO:
-  
-  - finish methods of getById, create, delete, update in base.controller
-  - add jest and supertest
-  - add winston or pino
-  - add morgan -> morganstream
 
-  ___FUTURE
-  - app.broker
-  - app.registry
-  - redis cache
-  - jobs / queues
+- finish methods of getById, create, delete, update in base.controller
+- add jest and supertest
+- add winston or pino
+- add morgan -> morganstream
+
+___FUTURE
+
+- app.broker
+- app.registry
+- redis cache [x]
+- jobs / queues
